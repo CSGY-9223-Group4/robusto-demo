@@ -1,0 +1,36 @@
+{
+ "signatures": [
+  {
+   "keyid": "69aa5742ecf4ee18c9b59889ba654a5a1283753c452d6457679f44cb1b5de0bb",
+   "sig": "3046022100cc68d9b958b103a6827f36cb8a285154da34316ea49bb910f3d6329d883abe85022100fbf3c3cbe86752e6994ff621172e1bdc48643e6f4138c3771642d3c91ce07604"
+  }
+ ],
+ "signed": {
+  "_type": "targets",
+  "expires": "2024-12-07T14:53:53Z",
+  "spec_version": "1.0.31",
+  "targets": {
+   "in-toto-metadata/b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/clone.bcccc170.link": {
+    "hashes": {
+     "sha256": "964c24f4fcc5e0a48c71bf50729f43f7e1db7278848ddcf9f5bbc1b812d971ea"
+    },
+    "length": 1116
+   },
+   "packages/demo-project.tar.gz": {
+    "custom": {
+     "in-toto": [
+      "in-toto-metadata/root.layout",
+      "in-toto-metadata/b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/clone.bcccc170.link",
+      "in-toto-metadata/b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/package.8a0ba954.link",
+      "in-toto-metadata/b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/update-version.bcccc170.link"
+     ]
+    },
+    "hashes": {
+     "sha256": "10e426fb9f709ecdb67272eba6c6d73120eef1cbcd366193503051cb8b497f34"
+    },
+    "length": 210
+   }
+  },
+  "version": 2
+ }
+}

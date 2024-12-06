@@ -1,0 +1,40 @@
+{
+ "signatures": [
+  {
+   "keyid": "4c46b76d8348d37e1f1ed1ba2978f8fd5470ef76efb37a3c3c80e5a78d63893e",
+   "sig": "3044022078b9c79e7c21acf2de40a883f290990bd1110a8b1391197d0e07d142c8a1133502204c2145271868c75722ce0d534a6bfd7bdf9f55f73eb5801baea48072983a7426"
+  }
+ ],
+ "signed": {
+  "_type": "targets",
+  "delegations": {
+   "keys": {
+    "879177360456b9883c3dc28b41b40d610f5086ac477893ac098c9410436ce773": {
+     "keytype": "ecdsa",
+     "keyval": {
+      "public": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEwCkl0WnS3bQmbj/cKBcnHWTApY9/\ntRrGbpgeIAnzSRuJM6kWLrf7nnJPYAZbAMemLNxoDsi0NnaeFhgX3Bqa7w==\n-----END PUBLIC KEY-----\n"
+     },
+     "scheme": "ecdsa-sha2-nistp256"
+    }
+   },
+   "roles": [
+    {
+     "keyids": [
+      "879177360456b9883c3dc28b41b40d610f5086ac477893ac098c9410436ce773"
+     ],
+     "name": "packages-and-in-toto-metadata-signer",
+     "paths": [
+      "in-toto-metadata/*/*.link",
+      "packages/*"
+     ],
+     "terminating": true,
+     "threshold": 1
+    }
+   ]
+  },
+  "expires": "2025-12-06T03:26:03Z",
+  "spec_version": "1.0.31",
+  "targets": {},
+  "version": 2
+ }
+}

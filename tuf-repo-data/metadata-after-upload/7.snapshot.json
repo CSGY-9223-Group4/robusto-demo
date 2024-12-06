@@ -1,0 +1,22 @@
+{
+ "signatures": [
+  {
+   "keyid": "69aa5742ecf4ee18c9b59889ba654a5a1283753c452d6457679f44cb1b5de0bb",
+   "sig": "304502203e11b2579c31684d994605786045104164ebe65974a3396441a3b6cd91ddf334022100cdfe7ba410d63fbe87c6f962b0c685e3e940fa92a8f5a6c28aaeb47e5adb9da5"
+  }
+ ],
+ "signed": {
+  "_type": "snapshot",
+  "expires": "2024-12-07T14:53:53Z",
+  "meta": {
+   "packages-and-in-toto-metadata-signer.json": {
+    "version": 3
+   },
+   "targets.json": {
+    "version": 4
+   }
+  },
+  "spec_version": "1.0.31",
+  "version": 7
+ }
+}

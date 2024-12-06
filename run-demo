@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+
+echo -e "\nDEMO: Make sure you have installed the dependencies"
+echo -e "Press any key to continue"
+read -r
+
+echo -e "\nDEMO: clean up"
+echo -e "Press any key to continue"
+read -r
+rm -rf ~/.config/tuf-upload-example/ ~/.local/share/tuf-upload-example ~/.local/share/tuf-example/ targets-ite2/ downloads/
+
+echo -e "\nDEMO: Make sure you have added your in-toto-demo output (final_product/) to the root of this project"
+echo -e "Press any key to continue"
+read -r
+
+echo -e "\nDEMO: migrate files from final_product/ to targets-ite2/"
+echo -e "Press any key to continue"
+read -r
+./migrate
+
+echo -e "\nDEMO: Start tuf-ite2 repository"
+echo -e "Press any key to continue"
+read -r
+./tuf-ite2/repository/repo &
+SERVER_PID=$! # save the pid of the server to kill it later
+
+sleep 2
+echo -e "\nDEMO: upload tar package in final_product/ to TUF repository along with metadata"
+echo -e "Press any key to continue"
+read -r
+./upload demo-project.tar.gz
+
+sleep 2
+echo -e "\nDEMO: download the package from TUF repository and perform in-toto verification"
+echo -e "Press any key to continue"
+read -r
+./download demo-project.tar.gz
+
+sleep 2
+echo -e "\nDEMO: kill the tuf-ite2 repository"
+echo -e "Press any key to continue"
+read -r
+kill $SERVER_PID
+

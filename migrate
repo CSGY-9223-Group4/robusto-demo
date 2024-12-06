@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+
+import os
+import hashlib
+import shutil
+import json
+
+IN_TOTO_DEMO_DIR = "final_product/"
+
+TARGETS_DIR = "targets-ite2/"
+PACKAGES_DIR = TARGETS_DIR + "packages/"
+IN_TOTO_METADATA_DIR = TARGETS_DIR + "in-toto-metadata/"
+PUBKEYS_DIR = TARGETS_DIR + "in-toto-pubkeys/"
+
+os.makedirs(PACKAGES_DIR, exist_ok=True)
+os.makedirs(IN_TOTO_METADATA_DIR, exist_ok=True)
+os.makedirs(PUBKEYS_DIR, exist_ok=True)
+
+# Search for tar.gz in IN_TOTO_DEMO_DIR
+package = ""
+layout = ""
+pubkeys = []
+links = []
+
+for file in os.listdir(IN_TOTO_DEMO_DIR):
+    if file.endswith(".tar.gz"):
+        package = file
+    elif file.endswith(".pub"):
+        pubkeys.append(file)
+    elif file.endswith(".link"):
+        links.append(file)
+    elif file.endswith(".layout"):
+        layout = file
+
+# Create links dir as hash of package name
+package_hash = hashlib.sha256(package.encode()).hexdigest()
+layout_hash = hashlib.sha256(layout.encode()).hexdigest()
+links_dir =  IN_TOTO_METADATA_DIR + package_hash + "/"
+os.makedirs(links_dir, exist_ok=True)
+
+# Copy package, pubkeys and links to their respective directories
+shutil.copy(IN_TOTO_DEMO_DIR + package, PACKAGES_DIR)
+shutil.copy(IN_TOTO_DEMO_DIR + layout, IN_TOTO_METADATA_DIR)
+for pubkey in pubkeys:
+    shutil.copy(IN_TOTO_DEMO_DIR + pubkey, PUBKEYS_DIR)
+for link in links:
+    shutil.copy(IN_TOTO_DEMO_DIR + link, links_dir)
+
+# Create custom metadata files for layout and package target that can be used
+# for repo init and the uploader
+
+# Create layout custom metadata
+custom_metadata = {
+    "custom": {
+        "in-toto": [ "in-toto-pubkeys/" + pubkey for pubkey in pubkeys ]
+    }
+}
+# with open(TARGETS_DIR + layout_hash + ".layout.custom", "w") as f:
+#     json.dump(custom_metadata, f)
+
+json.dump(custom_metadata, open(TARGETS_DIR + layout_hash + ".layout.custom", "w"))
+
+# Create package target custom metadata
+custom_metadata = {"custom": {"in-toto": [ "in-toto-metadata/" + layout ] + [
+    "in-toto-metadata/" + package_hash + "/" + link for link in links ]}}
+
+json.dump(custom_metadata, open(TARGETS_DIR + package_hash + ".package.custom", "w"))

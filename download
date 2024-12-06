@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+"""wrapper around tuf/client/client to download a package from a TUF repository"""
+
+import argparse
+import subprocess
+import os
+import shutil
+import shlex
+import glob
+
+
+def download_target(target):
+    print(f"Downloading {target}")
+
+    # Download the target
+    subprocess.run(["tuf-ite2/client/client", "download", target], check=True)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Download a package from a TUF repository")
+    parser.add_argument("package", help="The name of the package to download")
+
+    args = parser.parse_args()
+
+    # client tofu
+    try:
+        subprocess.run(["./tuf-ite2/client/client", "tofu"], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to initialise: {e}")
+
+    DOWNLOAD_DIR = "downloads/"
+    PACKAGE_TARGETDIR = "packages/"
+    LAYOUT = ""
+    PACKAGE_DIR = ""
+    PACKAGE_EXT = ".tar.gz"
+
+    if args.package:
+        # Make a new directory for the package in downloads/
+        PACKAGE_DIR = DOWNLOAD_DIR + args.package.replace(PACKAGE_EXT, "") + "/"
+        os.makedirs(PACKAGE_DIR, exist_ok=True)
+        
+        # prepend packages/ to the package name
+        download_target(PACKAGE_TARGETDIR + args.package)
+
+
+        # move the downloaded targets to the new directory
+        for filename in os.listdir(DOWNLOAD_DIR):
+            original_path = os.path.join(DOWNLOAD_DIR, filename)
+            if os.path.isfile(original_path):  # Ensure it's a file
+                new_path = filename.split("%2F")[-1]
+                new_full_path = os.path.join(PACKAGE_DIR, new_path)
+
+                if new_path.endswith(".layout"):
+                    LAYOUT = new_path
+                shutil.move(original_path, new_full_path)
+
+        print("Moved downloaded files to: " + PACKAGE_DIR)
+
+    else:
+        parser.print_help()
+
+
+    # Verify the downloaded package
+    os.chdir(PACKAGE_DIR)
+    verification_keys = " ".join(glob.glob("*.pub"))
+    verify_cmd = ("in-toto-verify"
+                f" --layout {LAYOUT}"
+                f" --verification-keys {verification_keys}")
+    print(verify_cmd)
+    retval = subprocess.call(shlex.split(verify_cmd))
+    print("In-toto verification Return value: " + str(retval))
+
+if __name__ == "__main__":
+    main()
+

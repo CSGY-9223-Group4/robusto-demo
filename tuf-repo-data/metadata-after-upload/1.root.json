@@ -1,0 +1,57 @@
+{
+ "signatures": [
+  {
+   "keyid": "e1dc4c4223c996b7f1229ec0c1332e71025b7ca4219ddffe1f6574cd5a39fe63",
+   "sig": "304502205037d1bd911c6c571433b60a6e0850ece033262f0a66aa23bab7b6eb34734be3022100d43f9ddb619bd5d4e92a588cd01d1eddc56262e207f7e0b3ddb129a3376d425a"
+  }
+ ],
+ "signed": {
+  "_type": "root",
+  "consistent_snapshot": true,
+  "expires": "2025-12-06T14:53:47Z",
+  "keys": {
+   "69aa5742ecf4ee18c9b59889ba654a5a1283753c452d6457679f44cb1b5de0bb": {
+    "keytype": "ecdsa",
+    "keyval": {
+     "public": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEq8sqKez9ZoBmUbmLTZOrESgIjqhS\n4a5LGtQ/2vrxT1pYsdHc7/JNTe5jxzxUrc4vs9y51vjmKvHJS40gNK7V1Q==\n-----END PUBLIC KEY-----\n"
+    },
+    "scheme": "ecdsa-sha2-nistp256"
+   },
+   "e1dc4c4223c996b7f1229ec0c1332e71025b7ca4219ddffe1f6574cd5a39fe63": {
+    "keytype": "ecdsa",
+    "keyval": {
+     "public": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAED99jZbhgIIuOfDmmBvU+2vpbTTr5\nhBMRgF6WV7z0jrQeyWOA8P/kXMBX1uhuZhYQbdP51eE8UZ+UQEHsJ+kCyg==\n-----END PUBLIC KEY-----\n"
+    },
+    "scheme": "ecdsa-sha2-nistp256"
+   }
+  },
+  "roles": {
+   "root": {
+    "keyids": [
+     "e1dc4c4223c996b7f1229ec0c1332e71025b7ca4219ddffe1f6574cd5a39fe63"
+    ],
+    "threshold": 1
+   },
+   "snapshot": {
+    "keyids": [
+     "69aa5742ecf4ee18c9b59889ba654a5a1283753c452d6457679f44cb1b5de0bb"
+    ],
+    "threshold": 1
+   },
+   "targets": {
+    "keyids": [
+     "e1dc4c4223c996b7f1229ec0c1332e71025b7ca4219ddffe1f6574cd5a39fe63"
+    ],
+    "threshold": 1
+   },
+   "timestamp": {
+    "keyids": [
+     "69aa5742ecf4ee18c9b59889ba654a5a1283753c452d6457679f44cb1b5de0bb"
+    ],
+    "threshold": 1
+   }
+  },
+  "spec_version": "1.0.31",
+  "version": 1
+ }
+}

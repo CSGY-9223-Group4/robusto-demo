@@ -1,0 +1,30 @@
+{
+ "signatures": [
+  {
+   "keyid": "69aa5742ecf4ee18c9b59889ba654a5a1283753c452d6457679f44cb1b5de0bb",
+   "sig": "3046022100a3daabca62ae4f98144b396eb793c7e8ee4c91a922f4d4cd6a2e9cb6179807c1022100c3e8b3869d41cfab047e62bf0b52c78ccb6142f7eb36a151cc411b9f13c8b06b"
+  }
+ ],
+ "signed": {
+  "_type": "targets",
+  "expires": "2024-12-07T14:53:53Z",
+  "spec_version": "1.0.31",
+  "targets": {
+   "packages/demo-project.tar.gz": {
+    "custom": {
+     "in-toto": [
+      "in-toto-metadata/root.layout",
+      "in-toto-metadata/b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/clone.bcccc170.link",
+      "in-toto-metadata/b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/package.8a0ba954.link",
+      "in-toto-metadata/b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/update-version.bcccc170.link"
+     ]
+    },
+    "hashes": {
+     "sha256": "10e426fb9f709ecdb67272eba6c6d73120eef1cbcd366193503051cb8b497f34"
+    },
+    "length": 210
+   }
+  },
+  "version": 1
+ }
+}
