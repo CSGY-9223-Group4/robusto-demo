@@ -242,7 +242,10 @@ For reference I have provided the below files:
     `./tuf-repo-data/metadata/` directory. You can match the metadata files with
     the reference metadata files that I have provided.
 1.  `./final_product` which contains the in-toto demo output files I used. You
-    have to replace these files with your part1 output files.
+    have to replace these files with your part1 output files. Make sure you **do
+    not** put `./final_product/demo-project` directory and
+    `./final_product/untar.link` into the `./final_product` directory as these
+    should not be pushed to the TUF repository.
 1.  `./targets-ite2-saurabh/` which contains the targets and in-toto metadata
     after running the `./migrate` script for my demo. You have to run the
     `./migrate` after putting your files in `./final_product` to set up
