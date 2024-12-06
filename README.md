@@ -196,6 +196,24 @@ If you go through the run-demo script, you will see that it does the following:
     *   After downloading all targets it verifies the in-toto metadata for the
         downloaded package. Look out for in-toto verification return value in
         the output.
+    *   The `./downloads/` directory should look like this:
+
+      ```bash
+      tree -a downloads
+      downloads
+      └── demo-project
+          ├── alice.pub
+          ├── clone.bcccc170.link
+          ├── demo-project
+          │   └── foo.py
+          ├── demo-project.tar.gz
+          ├── package.8a0ba954.link
+          ├── root.layout
+          ├── untar.link
+          └── update-version.bcccc170.link
+
+      2 directories, 8 files
+      ```
 
 ## Lab4 Tasks
 
