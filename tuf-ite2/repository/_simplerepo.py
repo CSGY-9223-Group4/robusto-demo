@@ -63,9 +63,8 @@ class SimpleRepository(Repository):
     """
 
     # Lab4: ITE-2 expiry period for root and targets = 365 days, others = 1 day
-    # >>>
-    raise NotImplementedError("Implement this")
-    # <<<
+    expiry_period_root_timestamp = timedelta(days=365)
+    expiry_period = timedelta(days=1)
 
     def _build_key_dir(self, base_url: str) -> str:
         """build a unique and reproducible private key dir for the repository url"""
@@ -90,9 +89,14 @@ class SimpleRepository(Repository):
 
         # Lab4: Create signers as per ITE-2, root and targets share the same
         # key, snapshot and timestamp share the same key
-        # >>>
-        raise NotImplementedError("Implement this")
-        # <<<
+        root_key = CryptoSigner.generate_ecdsa()
+        timestamp_snapshot_key = CryptoSigner.generate_ecdsa()
+        signers = {
+            "root": root_key,
+            "targets": root_key,
+            "snapshot": timestamp_snapshot_key,
+            "timestamp": timestamp_snapshot_key,
+        }
 
         # setup a basic repository, generate signing key per top-level role
         with self.edit_root() as root:
@@ -107,9 +111,15 @@ class SimpleRepository(Repository):
         # Lab4: add the ITE-2 delegation for
         # packages-and-in-toto-metadata-signer. This role uses the same key as
         # timestamp and snapshot
-        # >>>
-        raise NotImplementedError("Implement this")
-        # <<<
+        delgatee_name = "packages-and-in-toto-metadata-signer"
+        self.submit_delegation(
+            rolename=delgatee_name,
+            data=json.dumps({timestamp_snapshot_key.public_key.keyid: timestamp_snapshot_key.public_key.to_dict()}).encode(),
+            paths=[
+                "in-toto-metadata/*/*.link",
+                "packages/*",
+            ],
+        )
         
         # share the private key of packages-and-in-toto-metadata-signer
         # with uploader so that it can sign that role for submitting new
@@ -130,21 +140,28 @@ class SimpleRepository(Repository):
         # for those layouts as targets to the `targets` role. Remember: The
         # public keys required to sign the layout can be determined from the
         # layout custom metadata
-        # >>>
-        raise NotImplementedError("Implement this")
-
-        # for layout_file in layouts:
+        for layout_file in layouts:
             # read the layout metadata file and the custom_metadata for that
             # layout
+            file_name = f"in-toto-metadata/{layout_file}"
+            with open(file_name, "r") as f:
+                layout_data = f.read()
+
+            layout_metadata_file = f"{sha256(layout_file.encode()).hexdigest()}.layout.custom"
+            with open(layout_metadata_file, "rb") as f:
+                custom_metadata = json.load(f)
 
             # add the layout as a target to the `targets` role. You also need to
             # send the custom metadata for the layout as part of the target
+            self.add_target(file_name, layout_data, custom_metadata)
 
             # iterate over the pubkeys mentioned in the custom metadata and add
             # them as targets to the `targets` role
-
-        # <<<
-
+            pubkeys = custom_metadata["custom"]["in-toto"]
+            for pubkey in pubkeys:
+                with open(pubkey, "r") as f:
+                    key_data = f.read()
+                    self.add_target(pubkey, key_data)
 
     @property
     def targets_infos(self) -> dict[str, MetaFile]:
