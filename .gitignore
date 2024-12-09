@@ -1,2 +1,4 @@
 **/__pycache__/
 robusto-venv/
+.vscode/
+targets-ite2/
