@@ -2,3 +2,4 @@
 robusto-venv/
 .vscode/
 targets-ite2/
+tuf-repo-data/metadata/

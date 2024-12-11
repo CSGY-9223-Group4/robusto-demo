@@ -12,21 +12,52 @@ PUBKEYS_DIR = "in-toto-pubkeys/"
 # Define role
 ROLE = "packages-and-in-toto-metadata-signer"
 
+def upload_target(target_file_path, role, custom_metadata = None):
+    print(f"Uploading {target_file_path}")
+
+    args = [
+        "../tuf-ite2/uploader/uploader",
+        "add-target",
+        role,
+        target_file_path
+    ]
+    if custom_metadata:
+        args.extend(["--custom", custom_metadata])
+
+    subprocess.run(args, check=True)
 
 def main():
-    raise NotImplementedError("This script is not implemented yet.")
-
     # Take package name as argument
+    parser = argparse.ArgumentParser(description="Upload a package to a TUF repository")
+    parser.add_argument("package", help="The name of the package to upload")
+
+    args = parser.parse_args()
 
     # Before uploading, you must change to the directory where the targets are stored
+    os.chdir(TARGETS_DIR)
 
     # Define role and filenames that have to be passed to `../tuf-ite2/uploader/uploader` binary
+    package_file = args.package
+    package_file_path = f"{PACKAGES_DIR}{package_file}"
+    package_medatadata_file = f"{hashlib.sha256(package_file.encode()).hexdigest()}.package.custom"
+    link_files = [
+        f"{IN_TOTO_METADATA_DIR}b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/clone.6e4b6e92.link",
+        f"{IN_TOTO_METADATA_DIR}b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/update-version.6e4b6e92.link",
+        f"{IN_TOTO_METADATA_DIR}b4df3c864becf593a939414e5cfb85a7d9406b5f8bb645d248a35163c9afd3f9/package.3b8ca98c.link"
+    ]
 
     # uploader init (tofu)
+    try:
+        subprocess.run(["../tuf-ite2/uploader/uploader", "tofu"], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to initialise: {e}")
 
     # upload package with its custom metadata
-
+    upload_target(package_file_path, ROLE, package_medatadata_file)
+    
     # upload all the links corresponding for the package you uploaded
+    for link_file in link_files:
+        upload_target(link_file, ROLE)
 
 
 if __name__ == "__main__":
