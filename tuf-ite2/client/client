@@ -86,25 +86,30 @@ def download(base_url: str, target: str) -> bool:
         )
         updater.refresh()
 
-        info = updater.get_targetinfo(target)
-
-        if info is None:
-            print(f"Target {target} not found")
-            return True
-
-        path = updater.find_cached_target(info)
-        if path:
-            print(f"Target is available in {path}")
-            return True
-
-        path = updater.download_target(info)
-        
         # Lab4: recursively download files mentioned in the custom field
         # >>>
-        raise NotImplementedError("Implement this")
+        targets = [target]
+        while targets:
+            target = targets.pop()
+
+            info = updater.get_targetinfo(target)
+
+            if info is None:
+                print(f"Target {target} not found")
+                return True
+
+            path = updater.find_cached_target(info)
+            if path:
+                print(f"Target is available in {path}")
+            else:
+                path = updater.download_target(info)
+                print(f"Target downloaded and available in {path}")
+
+            if info.custom and info.custom["in-toto"]:
+                targets.extend(info.custom["in-toto"])
         # <<<
 
-        print(f"Target downloaded and available in {path}")
+
 
     except (OSError, RepositoryError, DownloadError) as e:
         print(f"Failed to download target {target}: {e}")
