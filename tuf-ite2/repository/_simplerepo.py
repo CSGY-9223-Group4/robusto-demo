@@ -33,6 +33,8 @@ from tuf.repository import Repository
 from hashlib import sha256
 from pathlib import Path
 
+from rekor import RekorClient
+
 logger = logging.getLogger(__name__)
 
 # logger.setLevel(logging.DEBUG)
@@ -87,6 +89,10 @@ class SimpleRepository(Repository):
             lambda: MetaFile(1)
         )
 
+        # Create a rekor client to upload metadata to rekor
+        keydir = self._build_key_dir(base_url)
+        self.rekor_client = RekorClient(base_url, keydir)
+
         # Lab4: Create signers as per ITE-2, root and targets share the same
         # key, snapshot and timestamp share the same key
         root_key = CryptoSigner.generate_ecdsa()
@@ -124,7 +130,6 @@ class SimpleRepository(Repository):
         # share the private key of packages-and-in-toto-metadata-signer
         # with uploader so that it can sign that role for submitting new
         # versions
-        keydir = self._build_key_dir(base_url)
         if not os.path.isdir(keydir):
             os.makedirs(keydir)
         with open(f"{keydir}/{delgatee_name}", "wb") as f:
@@ -234,6 +239,10 @@ class SimpleRepository(Repository):
             self._snapshot_info.version = md.signed.version
         elif role not in ["root", "timestamp"]:
             self._targets_infos[f"{role}.json"].version = md.signed.version
+        elif role == "timestamp":
+            logger.info("Uploading timestamp version %s metadata to Rekor", self.timestamp().version)
+            root_md = copy.deepcopy(self.role_cache["root"][-1])
+            self.rekor_client.upload(root_md.to_bytes(), md.to_bytes())
 
     def add_target(self, path: str, content: str, custom_metadata: Optional[dict] = None) -> None:
         """Add a target to top-level targets metadata"""
